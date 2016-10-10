@@ -6,7 +6,7 @@ aws ec2 wait instance-terminated --instance-ids $Instance
 
 echo "Instances deleted"
 echo "Starting Deletion of Auto Scaling group"
-aws autoscaling set-desired-capacity --auto-scaling-group-name server-rg --desired-capacity 0
+aws autoscaling set-desired-capacity update-auto-scaling-group-name --auto-scaling-group-name server-rg --min-size 0 --desired-capacity 0
 aws autoscaling delete-auto-scaling-group --auto-scaling-group-name server-rg
 echo "Starting Deletion of Launch Configuration"
 aws autoscaling delete-launch-configuration --launch-configuration-name  itmo544sjconfigure
