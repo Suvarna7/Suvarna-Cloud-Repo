@@ -1,0 +1,13 @@
+from collections import Counter
+ip_list =[]
+for line in open('/Users/sjulania/code/apache-samples/access_log/access_log'):
+	try:
+		ip = line[:12]
+		ip_list.append(ip)
+	except (IndexError):
+		ip_list.append('null')
+        
+        #print ip
+counter = Counter(ip_list)
+for key,value in sorted(counter.most_common()):
+    print key, value
