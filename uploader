@@ -1,0 +1,51 @@
+<?php
+$servername='repo.csi5h9xn6ihn.us-west-2.rds.amazonaws.com';
+
+$username = "hermione";
+$password = "suvarnas";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+//include("config.php");
+   session_start();
+
+   if($_SERVER["REQUEST_METHOD"] == "POST") {
+      // hawkid and iit email sent from form
+
+      $hawkid = mysqli_real_escape_string($conn,$_POST['id']);
+      $email = mysqli_real_escape_string($conn,$_POST['Email']);
+
+      $sql = "SELECT id FROM user WHERE id = '$hawkid' and ,Email = '$email'";
+      $auth = mysqli_query($conn,$sql);
+      $row = mysqli_fetch_array($auth,MYSQLI_ASSOC);
+      $active = $row['active'];
+
+      $count = mysqli_num_rows($auth);
+
+      // If result matched $hawkid and $iitemail, table row must be 1 row
+
+      if($count == 1) {
+         session_register("id");
+         $_SESSION['login_user'] = $hawkid;
+
+         header("location: welcome.php");
+      }else {
+         $error = "Your Login hawkid or hawk email is invalid";
+      }
+   }
+?>
+<html>
+
+   <head>
+      <title>Login Page</title>
+
+      <style type = "text/css">
+         body {
+            font-family:Arial, Helvetica, sans-serif;
+            font-size:14px;
+         }
