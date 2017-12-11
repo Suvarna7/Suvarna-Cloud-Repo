@@ -1,0 +1,29 @@
+Simple Web Crawler to fecth information from a lego site
+
+
+import scrapy #python library used for web scraping 
+
+#Create a subclass Myspider from scrapy class Spider
+
+class MySpider(scrapy.Spider):
+    name = "little_spider"  	
+    start_urls = ['http://brickset.com/sets/year-2017'] #
+
+    GET_NAME = 'h1 a ::text'
+    GET_PIECES = './/dl[dt/text() = "Pieces"]/dd/a/text()'
+    GET_MINIFIGS = './/dl[dt/text() = "Minifigs"]/dd[2]/a/text()'
+    GET_IMAGE = 'img ::attr(src)'
+    yield {
+        'name': brickset.css(GET_NAME).extract_first(),
+        'pieces': brickset.xpath(GET_PIECES).extract_first(),
+        'minifigs': brickset.xpath(GET_MINIFIGS).extract_first(),
+        'image': brickset.css(GET_IMAGE).extract_first(),
+    }
+
+	GET_NEXT_PAGE = '.next a ::attr(href)'
+	new_page = response.css(GET_NEXT_PAGE).extract_first()
+	if new_page:
+	    yield scrapy.Request(
+	        response.urljoin(new_page),
+	        callback=self.parse
+	    )
