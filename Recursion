@@ -1,0 +1,21 @@
+import json
+from pprint import pprint
+def item_generator(json_input, lookup_key):
+    if isinstance(json_input, dict):
+        for k, v in json_input.iteritems():
+            if k == lookup_key:
+                yield v
+                print "%s:%s"%(k,v)
+            else:
+                for child_val in item_generator(v, lookup_key):
+                    yield child_val
+    elif isinstance(json_input, list):
+        for item in json_input:
+            for item_val in item_generator(item, lookup_key):
+                yield item_val
+
+if __name__ == '__main__':
+    with open('/Users/sjulania/code/json_data.xml') as data_file:    
+        data = json.load(data_file)
+        for _ in item_generator(data, "id"):
+            print "\n"
